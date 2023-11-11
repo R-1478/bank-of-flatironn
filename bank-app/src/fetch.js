@@ -4,6 +4,11 @@ const MyComponent = () => {
   const [transactions, setTransactions] = useState([]);
   const [filteredTransactions, setFilteredTransactions] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
+  const [newTransaction, setNewTransaction] = useState({
+    description: '',
+    category: '',
+    amount: ''
+  });
 
   useEffect(() => {
     fetchData();
@@ -14,7 +19,7 @@ const MyComponent = () => {
       .then(response => response.json())
       .then(data => {
         setTransactions(data || []);
-        setFilteredTransactions(data || []); // Initialize filteredTransactions with all transactions
+        setFilteredTransactions(data || []);
       })
       .catch(error => {
         console.error('Error fetching data:', error);
@@ -25,8 +30,15 @@ const MyComponent = () => {
     // Implement your sorting logic here
     // ...
 
-    // Update filteredTransactions with sorted data
-    setFilteredTransactions([...transactions]);
+    // Filter transactions based on the search term
+    const filtered = transactions.filter(transaction =>
+      Object.values(transaction).some(value =>
+        String(value).toLowerCase().includes(searchTerm.toLowerCase())
+      )
+    );
+
+    // Update filteredTransactions with sorted and filtered data
+    setFilteredTransactions([...filtered]);
   };
 
   const handleSearch = () => {
@@ -37,6 +49,7 @@ const MyComponent = () => {
       )
     );
 
+    // Update filteredTransactions with the filtered data
     setFilteredTransactions(filtered);
   };
 
@@ -45,6 +58,35 @@ const MyComponent = () => {
     const updatedTransactions = transactions.filter(transaction => transaction.id !== id);
     setTransactions(updatedTransactions);
     setFilteredTransactions(updatedTransactions);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewTransaction(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
+  };
+
+  const handlePostTransaction = () => {
+    // Create a new transaction with today's date
+    const today = new Date().toISOString().split('T')[0];
+    const newTransactionWithDate = {
+      ...newTransaction,
+      date: today,
+      newTransaction.id = 14++
+    };
+
+    // Display the new transaction by updating state
+    setTransactions(prevState => [...prevState, newTransactionWithDate]);
+    setFilteredTransactions(prevState => [...prevState, newTransactionWithDate]);
+
+    // Reset the newTransaction state for the next input
+    setNewTransaction({
+      description: '',
+      category: '',
+      amount: ''
+    });
   };
 
   return (
@@ -59,6 +101,37 @@ const MyComponent = () => {
         />
         <button onClick={handleSearch} id="button">Search</button>
       </div>
+
+      <form>
+        <label>
+          Description:
+          <input
+            type="text"
+            name="description"
+            value={newTransaction.description}
+            onChange={handleInputChange}
+          />
+        </label>
+        <label>
+          Category:
+          <input
+            type="text"
+            name="category"
+            value={newTransaction.category}
+            onChange={handleInputChange}
+          />
+        </label>
+        <label>
+          Amount:
+          <input
+            type="text"
+            name="amount"
+            value={newTransaction.amount}
+            onChange={handleInputChange}
+          />
+        </label>
+        <button type="button" onClick={handlePostTransaction}>Post Transaction</button>
+      </form>
 
       <table id='table'>
         <thead>
