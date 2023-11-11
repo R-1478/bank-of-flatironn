@@ -27,9 +27,6 @@ const MyComponent = () => {
   };
 
   const sortData = (key) => {
-    // Implement your sorting logic here
-    // ...
-
     // Filter transactions based on the search term
     const filtered = transactions.filter(transaction =>
       Object.values(transaction).some(value =>
@@ -69,12 +66,15 @@ const MyComponent = () => {
   };
 
   const handlePostTransaction = () => {
-    // Create a new transaction with today's date
+    // Generate a new ID for the transaction
+    const newId = transactions.length > 0 ? Math.max(...transactions.map(transaction => transaction.id)) + 1 : 1;
+
+    // Create a new transaction with today's date and the generated ID
     const today = new Date().toISOString().split('T')[0];
     const newTransactionWithDate = {
       ...newTransaction,
-      date: today,
-      newTransaction.id = 14++
+      id: newId,
+      date: today
     };
 
     // Display the new transaction by updating state
