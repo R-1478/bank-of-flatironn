@@ -1,4 +1,4 @@
-# React Transaction Management
+# Bank-app
 
 This React application allows users to manage transactions by displaying, searching, sorting, deleting, and posting new transactions.
 
@@ -18,11 +18,11 @@ This React application allows users to manage transactions by displaying, search
    git clone https://github.com/R-1478/bank-app.git
    
 
-## dependencies 
+## usage 
 run npm install
 run npm start
 
-run json-server --watch db.json to get the backend started. Use a specified port for smooth running.
+on a second terminal, run json-server --watch db.json to get the backend started. Use a specified port for smooth running.
 
 ## License
 Copyright (c) 2023 Evans Thitai
